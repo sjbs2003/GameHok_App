@@ -9,35 +9,50 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+
+// Custom GameHok Colors
+object GamehokTheme {
+    val Green = Color(0xFF00B167)
+    val DarkBackground = Color(0xFF1A1A1A)
+    val TextWhite = Color(0xFFFFFFFF)
+}
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = GamehokTheme.Green,
+    secondary = GamehokTheme.Green,
+    tertiary = GamehokTheme.Green,
+    background = GamehokTheme.DarkBackground,
+    surface = GamehokTheme.DarkBackground,
+    onPrimary = GamehokTheme.TextWhite,
+    onSecondary = GamehokTheme.TextWhite,
+    onTertiary = GamehokTheme.TextWhite,
+    onBackground = GamehokTheme.TextWhite,
+    onSurface = GamehokTheme.TextWhite
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val LightColorScheme = darkColorScheme( // Using dark scheme for consistency
+    primary = GamehokTheme.Green,
+    secondary = GamehokTheme.Green,
+    tertiary = GamehokTheme.Green,
+    background = GamehokTheme.DarkBackground,
+    surface = GamehokTheme.DarkBackground,
+    onPrimary = GamehokTheme.TextWhite,
+    onSecondary = GamehokTheme.TextWhite,
+    onTertiary = GamehokTheme.TextWhite,
+    onBackground = GamehokTheme.TextWhite,
+    onSurface = GamehokTheme.TextWhite
 )
 
 @Composable
 fun GameHokAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    darkTheme: Boolean = true, // Always use dark theme by default
+    dynamicColor: Boolean = false, // Disable dynamic color by default
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -45,9 +60,16 @@ fun GameHokAppTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+        else -> DarkColorScheme // Always use dark scheme for consistency
+    }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = GamehokTheme.DarkBackground.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+        }
     }
 
     MaterialTheme(
