@@ -1,42 +1,29 @@
 package com.kirab.gamehokapp.view
 
-import  androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kirab.gamehokapp.R
+import java.util.UUID
 
 data class CourseInfo(
+    val id: String = UUID.randomUUID().toString(),
     val title: String,
     val description: String,
     val instructor: String,
@@ -44,6 +31,7 @@ data class CourseInfo(
     val thumbnail: Int
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CourseSection(
     modifier: Modifier = Modifier,
@@ -51,6 +39,33 @@ fun CourseSection(
 ) {
     val lazyListState = rememberLazyListState()
     val flingBehavior = rememberSnapperFlingBehavior(lazyListState)
+
+    // Remember courses list to prevent recreations
+    val courses = remember {
+        listOf(
+            CourseInfo(
+                title = "Esports for Beginners",
+                description = "Start your journey with experts and be the professional you want",
+                instructor = "By Ninja",
+                duration = "16 Mins",
+                thumbnail = R.drawable.course_thumbnail1
+            ),
+            CourseInfo(
+                title = "Advanced PUBG Tactics",
+                description = "Master advanced strategies and gameplay techniques",
+                instructor = "By Shroud",
+                duration = "25 Mins",
+                thumbnail = R.drawable.course_thumbnail2
+            ),
+            CourseInfo(
+                title = "Pro Gaming Mindset",
+                description = "Develop the mental strength needed for competitive gaming",
+                instructor = "By Pokimane",
+                duration = "20 Mins",
+                thumbnail = R.drawable.course_thumbnail3
+            )
+        )
+    }
 
     // Calculate current page for dot indicators
     val currentPage = remember {
@@ -67,92 +82,86 @@ fun CourseSection(
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
-        // Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Learn from the best to be the best",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "View All",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF00B167),
-                modifier = Modifier.clickable { onViewAllClick() }
-            )
-        }
+        // Header section
+        CourseSectionHeader(onViewAllClick)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Course Cards
+        // Course cards
         LazyRow(
             state = lazyListState,
             flingBehavior = flingBehavior,
-            modifier = modifier.snapToCenter(lazyListState),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.snapToCenter(lazyListState),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(3) { index ->
-                Box(
+            items(
+                count = courses.size,
+                key = { index -> courses[index].id }
+            ) { index ->
+                CourseCard(
+                    courseInfo = courses[index],
                     modifier = Modifier
-                        .fillParentMaxWidth()
-                        .padding(end = if (index < 2) 16.dp else 0.dp)
-                ) {
-                    CourseCard(
-                        courseInfo = when(index) {
-                            0 -> CourseInfo(
-                                title = "Esports for Beginners",
-                                description = "Start your journey with experts and be the professional you want",
-                                instructor = "By Ninja",
-                                duration = "16 Mins",
-                                thumbnail = R.drawable.course_thumbnail1
-                            )
-                            1 -> CourseInfo(
-                                title = "Advanced PUBG Tactics",
-                                description = "Master advanced strategies and gameplay techniques",
-                                instructor = "By Shroud",
-                                duration = "25 Mins",
-                                thumbnail = R.drawable.course_thumbnail2
-                            )
-                            else -> CourseInfo(
-                                title = "Pro Gaming Mindset",
-                                description = "Develop the mental strength needed for competitive gaming",
-                                instructor = "By Pokimane",
-                                duration = "20 Mins",
-                                thumbnail = R.drawable.course_thumbnail3
-                            )
-                        }
-                    )
-                }
+                        .animateItemPlacement()
+                        .padding(end = if (index < courses.size - 1) 16.dp else 0.dp)
+                )
             }
         }
 
         // Dot indicators
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            repeat(3) { index ->
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .size(8.dp)
-                        .background(
-                            color = if (currentPage.value == index)
-                                MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
-                            shape = CircleShape
-                        )
-                )
-            }
+        DotIndicators(
+            totalDots = courses.size,
+            currentPage = currentPage.value
+        )
+    }
+}
+
+@Composable
+private fun CourseSectionHeader(onViewAllClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Learn from the best to be the best",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Text(
+            text = "View All",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color(0xFF00B167),
+            modifier = Modifier.clickable { onViewAllClick() }
+        )
+    }
+}
+
+@Composable
+private fun DotIndicators(
+    totalDots: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        repeat(totalDots) { index ->
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .size(8.dp)
+                    .background(
+                        color = if (currentPage == index)
+                            MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                        shape = CircleShape
+                    )
+            )
         }
     }
 }
@@ -163,10 +172,10 @@ fun CourseCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.width(320.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF1F1FA)
+            containerColor = Color.White
         )
     ) {
         Column(
@@ -174,23 +183,24 @@ fun CourseCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            // Top section with image and content
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Thumbnail
-                Image(
-                    painter = painterResource(id = courseInfo.thumbnail),
+                // Left side - Image
+                GameHokImage(
+                    imageRes = courseInfo.thumbnail,
                     contentDescription = courseInfo.title,
                     modifier = Modifier
-                        .size(110.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
+                        .size(120.dp)
+                        .clip(RoundedCornerShape(8.dp))
                 )
 
-                // Course Information
+                // Right side - Content
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
                         text = courseInfo.title,
@@ -199,39 +209,37 @@ fun CourseCard(
                         color = Color.Black
                     )
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
                     Text(
                         text = courseInfo.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Black
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Black.copy(alpha = 0.7f)
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
                         text = courseInfo.instructor,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF00B167)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Bottom section with duration and start button
+            // Divider
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.Black
+                color = Color.Gray.copy(alpha = 0.2f)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Bottom section with duration and start button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Duration
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -239,33 +247,23 @@ fun CourseCard(
                     Icon(
                         painter = painterResource(id = R.drawable.clock),
                         contentDescription = "Duration",
-                        tint = Color.Black,
+                        tint = Color.Black.copy(alpha = 0.7f),
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
                         text = courseInfo.duration,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Black
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Black.copy(alpha = 0.7f)
                     )
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.clickable { /* Handle start course click */ }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.start),
-                        contentDescription = "Start Course",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = "Start Course",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                // Start Course Button
+                Text(
+                    text = "Start Course",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF00B167),
+                    modifier = Modifier.clickable { /* Handle click */ }
+                )
             }
         }
     }
