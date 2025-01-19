@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -39,6 +41,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,6 +54,76 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kirab.gamehokapp.R
 
+@Composable
+fun GameSection(
+    onViewAllClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    ) {
+        // Header Row with proper spacing
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Play Tournament by Games",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Text(
+                text = "View All",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF00B167),
+                modifier = Modifier.clickable { onViewAllClick() }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Games Row with proper spacing and alignment
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            GameCard(
+                gameImage = R.drawable.pubg,
+                gameName = "PUBG",
+                onClick = { }
+            )
+            GameCard(
+                gameImage = R.drawable.cod,
+                gameName = "Call of Duty",
+                onClick = { }
+            )
+            GameCard(
+                gameImage = R.drawable.cs,
+                gameName = "Counter Strike",
+                onClick = { }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Divider
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(1.dp)
+                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+        )
+    }
+}
 
 @Composable
 fun GameCard(
@@ -94,6 +168,76 @@ fun GameCard(
 }
 
 @Composable
+fun PremiumCardsList(modifier: Modifier = Modifier) {
+    val lazyListState = rememberLazyListState()
+
+    // Calculate the current page based on the first VISIBLE item
+    val currentPage = remember {
+        derivedStateOf {
+            val firstVisibleItem = lazyListState.firstVisibleItemIndex
+            val centerOffset = lazyListState.firstVisibleItemScrollOffset
+            val itemSize = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull()?.size ?: 0
+
+            if (centerOffset > itemSize / 2) firstVisibleItem + 1 else firstVisibleItem
+        }
+    }
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            state = lazyListState,
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            items(5) { index ->
+                Box(
+                    modifier = Modifier
+                        .fillParentMaxWidth() // This makes each card fill the screen width
+                        .padding(end = if (index < 4) 16.dp else 0.dp) // Add padding between cards
+                ) {
+                    PremiumFeatureCard(
+                        title = "GameHok",
+                        description = when(index) {
+                            0 -> "Upgrade to premium membership and get 100 🎟️ and many other premium features."
+                            1 -> "Access exclusive tournaments and win premium rewards!"
+                            2 -> "Get priority access to all upcoming events"
+                            3 -> "Unlock special gaming badges and profiles"
+                            else -> "Join premium gaming communities"
+                        }
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Dot indicators
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(5) { index ->
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .size(8.dp)
+                        .background(
+                            color = if (currentPage.value == index)
+                                MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                            shape = CircleShape
+                        )
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun PremiumFeatureCard(
     title: String,
     description: String,
@@ -101,7 +245,7 @@ fun PremiumFeatureCard(
 ) {
     Card(
         modifier = modifier
-            .width(420.dp)
+            .fillMaxWidth()  // Make card fill available width
             .height(160.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -109,7 +253,7 @@ fun PremiumFeatureCard(
         )
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
@@ -156,6 +300,7 @@ fun PremiumFeatureCard(
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -310,7 +455,7 @@ fun BottomBar(modifier: Modifier = Modifier) {
         )
         NavigationBarItem(
             icon = { Icon(painter = painterResource(id = R.drawable.trophy), contentDescription = "Tournament") },
-            label = { Text("My Tournament") },
+            label = { Text("Tournament") },
             selected = false,
             onClick = { },
             colors = NavigationBarItemDefaults.colors(
