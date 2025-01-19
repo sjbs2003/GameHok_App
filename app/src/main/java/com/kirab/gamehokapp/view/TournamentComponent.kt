@@ -1,5 +1,6 @@
 package com.kirab.gamehokapp.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,9 +38,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.kirab.gamehokapp.R
+import java.util.UUID
 
 
 data class TournamentInfo(
+    val id: String = UUID.randomUUID().toString(),
     val game: String,
     val organizer: String,
     val registrationStatus: RegistrationStatus,
@@ -59,6 +63,7 @@ enum class RegistrationStatus {
     OPENING_SOON
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TournamentSection(
     modifier: Modifier = Modifier,
@@ -67,11 +72,60 @@ fun TournamentSection(
     val lazyListState = rememberLazyListState()
     val flingBehavior = rememberSnapperFlingBehavior(lazyListState)
 
+    val tournaments = remember {
+        listOf(
+            TournamentInfo(
+                game = "PUBG tournament",
+                organizer = "Red Bull",
+                registrationStatus = RegistrationStatus.OPEN,
+                currentPlayers = 670,
+                maxPlayers = 800,
+                gameName = "PUBG",
+                gameMode = "Solo",
+                entryFee = 10,
+                startTime = "3rd Aug at 10:00 pm",
+                prizePool = 1000,
+                backgroundImage = R.drawable.pubg_tournament,
+                organizerLogo = R.drawable.redbull
+            ),
+            TournamentInfo(
+                game = "COD tournament",
+                organizer = "Monster Energy",
+                registrationStatus = RegistrationStatus.CLOSED,
+                currentPlayers = 500,
+                maxPlayers = 500,
+                gameName = "COD",
+                gameMode = "Squad",
+                entryFee = 20,
+                startTime = "4th Aug at 8:00 pm",
+                prizePool = 2000,
+                backgroundImage = R.drawable.cod_tournament,
+                organizerLogo = R.drawable.monster
+            ),
+            TournamentInfo(
+                game = "Fortnite tournament",
+                organizer = "Asus",
+                registrationStatus = RegistrationStatus.OPENING_SOON,
+                currentPlayers = 0,
+                maxPlayers = 1000,
+                gameName = "Fortnite",
+                gameMode = "Duo",
+                entryFee = 15,
+                startTime = "5th Aug at 9:00 pm",
+                prizePool = 1500,
+                backgroundImage = R.drawable.fortnite_tournament,
+                organizerLogo = R.drawable.asusrog
+            )
+        )
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
+        val headerText = remember { "Compete in Battles" }
+
         // Header
         Row(
             modifier = Modifier
@@ -81,7 +135,7 @@ fun TournamentSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Compete in Battles",
+                text = headerText,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -103,52 +157,13 @@ fun TournamentSection(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(3) { index ->
+            items(
+                count = tournaments.size,
+                key = { index -> tournaments[index].id }
+            ) { index ->
                 TournamentCard(
-                    tournamentInfo = when(index) {
-                        0 -> TournamentInfo(
-                            game = "PUBG tournament",
-                            organizer = "Red Bull",
-                            registrationStatus = RegistrationStatus.OPEN,
-                            currentPlayers = 670,
-                            maxPlayers = 800,
-                            gameName = "PUBG",
-                            gameMode = "Solo",
-                            entryFee = 10,
-                            startTime = "3rd Aug at 10:00 pm",
-                            prizePool = 1000,
-                            backgroundImage = R.drawable.pubg_tournament,
-                            organizerLogo = R.drawable.redbull
-                        )
-                        1 -> TournamentInfo(
-                            game = "COD tournament",
-                            organizer = "Monster Energy",
-                            registrationStatus = RegistrationStatus.CLOSED,
-                            currentPlayers = 500,
-                            maxPlayers = 500,
-                            gameName = "COD",
-                            gameMode = "Squad",
-                            entryFee = 20,
-                            startTime = "4th Aug at 8:00 pm",
-                            prizePool = 2000,
-                            backgroundImage = R.drawable.cod_tournament,
-                            organizerLogo = R.drawable.monster
-                        )
-                        else -> TournamentInfo(
-                            game = "Fortnite tournament",
-                            organizer = "Asus",
-                            registrationStatus = RegistrationStatus.OPENING_SOON,
-                            currentPlayers = 0,
-                            maxPlayers = 1000,
-                            gameName = "Fortnite",
-                            gameMode = "Duo",
-                            entryFee = 15,
-                            startTime = "5th Aug at 9:00 pm",
-                            prizePool = 1500,
-                            backgroundImage = R.drawable.fortnite_tournament,
-                            organizerLogo = R.drawable.asusrog
-                        )
-                    }
+                    tournamentInfo = tournaments[index],
+                    modifier = modifier.animateItemPlacement()
                 )
             }
         }
