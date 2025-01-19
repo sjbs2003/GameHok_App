@@ -1,7 +1,6 @@
 package com.kirab.gamehokapp.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -216,11 +215,7 @@ fun TournamentCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Surface(
-                        color = when(tournamentInfo.registrationStatus) {
-                            RegistrationStatus.OPEN -> Color(0xFF00B167)
-                            RegistrationStatus.CLOSED -> Color.Red
-                            RegistrationStatus.OPENING_SOON -> Color.Gray
-                        },
+                        color = statusColor,
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Text(
