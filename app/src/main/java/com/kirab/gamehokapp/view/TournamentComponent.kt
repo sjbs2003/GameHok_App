@@ -175,8 +175,20 @@ fun TournamentCard(
     tournamentInfo: TournamentInfo,
     modifier: Modifier = Modifier
 ) {
+    val cardModifier = remember(modifier) {
+        modifier.width(300.dp)
+    }
+
+    val statusColor = remember(tournamentInfo.registrationStatus) {
+        when(tournamentInfo.registrationStatus) {
+            RegistrationStatus.OPEN -> Color(0xFF00B167)
+            RegistrationStatus.CLOSED -> Color.Red
+            RegistrationStatus.OPENING_SOON -> Color.Gray
+        }
+    }
+
     Card(
-        modifier = modifier.width(300.dp),
+        modifier = cardModifier,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)
@@ -185,10 +197,12 @@ fun TournamentCard(
         Column {
             // Image Section
             Box(
-                modifier = modifier.fillMaxWidth().height(160.dp)
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
             ) {
-                Image(
-                    painter = painterResource(id = tournamentInfo.backgroundImage),
+                GameHokImage(
+                    imageRes = tournamentInfo.backgroundImage,
                     contentDescription = tournamentInfo.game,
                     modifier = modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -253,140 +267,116 @@ fun TournamentCard(
                         .padding(8.dp)
                         .background(Color.White, CircleShape)
                 ) {
-                    Image(
-                        painter = painterResource(id = tournamentInfo.organizerLogo),
+                    GameHokImage(
+                        imageRes = tournamentInfo.organizerLogo,
                         contentDescription = tournamentInfo.organizer,
-                        contentScale = ContentScale.Crop,  // Make image fill the space
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
                     )
                 }
             }
+            // Tournament Detail
+            TournamentDetails(tournamentInfo)
+        }
+    }
+}
 
-            // Tournament Details Section
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF1E1E1E))
-                    .padding(16.dp)
+
+@Composable
+private fun TournamentDetails(tournamentInfo: TournamentInfo) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFF1E1E1E))
+            .padding(16.dp)
+    ) {
+        Text(
+            text = tournamentInfo.game,
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.White
+        )
+
+        Text(
+            text = "By ${tournamentInfo.organizer}",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        GameInfoTags(tournamentInfo)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TournamentTimeAndPrize(tournamentInfo)
+    }
+}
+
+@Composable
+private fun GameInfoTags(tournamentInfo: TournamentInfo) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        listOf(
+            tournamentInfo.gameName,
+            tournamentInfo.gameMode,
+            "Entry-${tournamentInfo.entryFee}"
+        ).forEach { text ->
+            Surface(
+                color = Color(0xFF2A2A2A),
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = tournamentInfo.game,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.White
-                )
-
-                Text(
-                    text = "By ${tournamentInfo.organizer}",
+                    text = text,
+                    color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Game Mode and Entry Fee
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    // BGMI Box
-                    Surface(
-                        color = Color(0xFF2A2A2A),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            text = tournamentInfo.gameName,
-                            color = Color.White,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                        )
-                    }
-
-                    // Game Mode Box
-                    Surface(
-                        color = Color(0xFF2A2A2A),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            text = tournamentInfo.gameMode,
-                            color = Color.White,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
-                        )
-                    }
-
-                    // Entry Fee Box
-                    Surface(
-                        color = Color(0xFF2A2A2A),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "Entry-${tournamentInfo.entryFee}",
-                                color = Color.White,
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.coin),
-                                contentDescription = "coins",
-                                tint = Color.Unspecified,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Start Time
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.clock),
-                        contentDescription = "time",
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "Starts ${tournamentInfo.startTime}",
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-
-                // Prize Pool
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.trophy),
-                        contentDescription = "prize",
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "Prize Pool- ${tournamentInfo.prizePool}",
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Spacer(modifier = modifier.width(4.dp))
-                    Icon(
-                        painter = painterResource(id = R.drawable.coin),
-                        contentDescription = "coins",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
             }
         }
+    }
+}
+
+@Composable
+private fun TournamentTimeAndPrize(tournamentInfo: TournamentInfo) {
+    // Time info
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.clock),
+            contentDescription = "time",
+            tint = Color.White,
+            modifier = Modifier.size(16.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "Starts ${tournamentInfo.startTime}",
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
+
+    // Prize info
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.trophy),
+            contentDescription = "prize",
+            tint = Color.Yellow,
+            modifier = Modifier.size(16.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "Prize Pool- ${tournamentInfo.prizePool}",
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
