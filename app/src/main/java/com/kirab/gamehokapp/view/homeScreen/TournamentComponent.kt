@@ -1,4 +1,4 @@
-package com.kirab.gamehokapp.view
+package com.kirab.gamehokapp.view.homeScreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,8 +36,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kirab.gamehokapp.R
+import com.kirab.gamehokapp.ui.theme.GamehokTheme
 import java.util.UUID
 
 
@@ -280,98 +283,151 @@ fun TournamentCard(
 
 
 @Composable
-private fun TournamentDetails(tournamentInfo: TournamentInfo) {
-    Column(
-        modifier = Modifier
+private fun TournamentDetails(
+    tournamentInfo: TournamentInfo,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
             .fillMaxWidth()
-            .background(Color(0xFF1E1E1E))
-            .padding(16.dp)
+            .background(GamehokTheme.TournamentGreen)
     ) {
-        Text(
-            text = tournamentInfo.game,
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.White
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            // Title and organizer
+            Text(
+                text = tournamentInfo.game,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+                color = GamehokTheme.TextWhite
+            )
 
-        Text(
-            text = "By ${tournamentInfo.organizer}",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray
-        )
+            Text(
+                text = "By ${tournamentInfo.organizer}",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                color = GamehokTheme.TextWhite.copy(alpha = 0.7f)
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        GameInfoTags(tournamentInfo)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TournamentTimeAndPrize(tournamentInfo)
-    }
-}
-
-@Composable
-private fun GameInfoTags(tournamentInfo: TournamentInfo) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        listOf(
-            tournamentInfo.gameName,
-            tournamentInfo.gameMode,
-            "Entry-${tournamentInfo.entryFee}"
-        ).forEach { text ->
-            Surface(
-                color = Color(0xFF2A2A2A),
-                shape = RoundedCornerShape(8.dp)
+            // Game tags
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                listOf(
+                    tournamentInfo.gameName,
+                    tournamentInfo.gameMode,
+                ).forEach { text ->
+                    Surface(
+                        color = GamehokTheme.DarkBackground,
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = text,
+                            color = GamehokTheme.TextWhite,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                        )
+                    }
+                }
+
+                // Entry fee tag with coin icon
+                Surface(
+                    color = GamehokTheme.DarkBackground,
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = "Entry-${tournamentInfo.entryFee}",
+                            color = GamehokTheme.TextWhite,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.coin),
+                            contentDescription = "coins",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(14.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Time and Prize with icons
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.clock),
+                    contentDescription = "time",
+                    tint = GamehokTheme.TextWhite,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = text,
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    text = "Starts ${tournamentInfo.startTime}",
+                    color = GamehokTheme.TextWhite,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Prize pool
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.trophy),
+                        contentDescription = "prize",
+                        tint = Color(0xFFFFD700), // Keeping gold color for trophy
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Prize Pool- ${tournamentInfo.prizePool}",
+                        color = GamehokTheme.TextWhite,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Spacer(modifier = modifier.width(4.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.coin),
+                        contentDescription = "coins",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+
+                // Right arrow icon
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = "View details",
+                    tint = GamehokTheme.TextWhite,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { /* Handle click for tournament details */ }
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun TournamentTimeAndPrize(tournamentInfo: TournamentInfo) {
-    // Time info
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 4.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.clock),
-            contentDescription = "time",
-            tint = Color.White,
-            modifier = Modifier.size(16.dp)
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = "Starts ${tournamentInfo.startTime}",
-            color = Color.White,
-            style = MaterialTheme.typography.bodySmall
-        )
-    }
-
-    // Prize info
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 4.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.trophy),
-            contentDescription = "prize",
-            tint = Color.Yellow,
-            modifier = Modifier.size(16.dp)
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = "Prize Pool- ${tournamentInfo.prizePool}",
-            color = Color.White,
-            style = MaterialTheme.typography.bodySmall
-        )
     }
 }

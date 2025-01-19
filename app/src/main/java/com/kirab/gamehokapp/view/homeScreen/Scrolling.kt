@@ -1,4 +1,4 @@
-package com.kirab.gamehokapp.view
+package com.kirab.gamehokapp.view.homeScreen
 
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope

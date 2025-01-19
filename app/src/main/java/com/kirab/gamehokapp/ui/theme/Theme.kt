@@ -2,12 +2,10 @@ package com.kirab.gamehokapp.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
@@ -19,6 +17,8 @@ import androidx.core.view.WindowCompat
 // Custom GameHok Colors
 object GamehokTheme {
     val Green = Color(0xFF00B167)
+    val TournamentGreen = Color(0xFF257347)  // Added darker green for tournament backgrounds
+    val DarkerGreen = Color(0xFF072217)  // Added even darker green for tags
     val DarkBackground = Color(0xFF1A1A1A)
     val TextWhite = Color(0xFFFFFFFF)
 }

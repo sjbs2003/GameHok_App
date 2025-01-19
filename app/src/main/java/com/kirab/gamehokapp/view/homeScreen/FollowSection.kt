@@ -1,4 +1,4 @@
-package com.kirab.gamehokapp.view
+package com.kirab.gamehokapp.view.homeScreen
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
