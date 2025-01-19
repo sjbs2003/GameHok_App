@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -76,7 +76,7 @@ fun TopBar(modifier: Modifier = Modifier) {
                         Icon(
                             painter = painterResource(id = R.drawable.voucher),
                             contentDescription = "vouchers",
-                            tint = MaterialTheme.colorScheme.onPrimary,
+                            tint = Color.Unspecified,
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
@@ -101,9 +101,9 @@ fun TopBar(modifier: Modifier = Modifier) {
                         modifier = Modifier.padding(start = 8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_coin),
+                            painter = painterResource(id = R.drawable.coin),
                             contentDescription = "Coins",
-                            tint = Color(0xFFFFD700),
+                            tint = Color.Unspecified,
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
@@ -120,7 +120,7 @@ fun TopBar(modifier: Modifier = Modifier) {
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Notifications,
+                        imageVector = Icons.Outlined.Notifications,
                         contentDescription = "Notifications",
                         tint = MaterialTheme.colorScheme.onBackground
                     )
@@ -140,7 +140,7 @@ fun BottomBar(modifier: Modifier = Modifier) {
         containerColor = MaterialTheme.colorScheme.background
     ) {
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home") },
+            icon = { Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = true,
             onClick = { },
@@ -153,7 +153,7 @@ fun BottomBar(modifier: Modifier = Modifier) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(painter = painterResource(id = R.drawable.ic_tournament), contentDescription = "Tournament") },
+            icon = { Icon(painter = painterResource(id = R.drawable.trophy), contentDescription = "Tournament") },
             label = { Text("My Tournament") },
             selected = false,
             onClick = { },
@@ -179,7 +179,7 @@ fun BottomBar(modifier: Modifier = Modifier) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(painter = painterResource(id = R.drawable.ic_chat), contentDescription = "Chats") },
+            icon = { Icon(painter = painterResource(id = R.drawable.chat), contentDescription = "Chats") },
             label = { Text("Chats") },
             selected = false,
             onClick = { },
