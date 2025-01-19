@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -41,6 +42,9 @@ fun TournamentSection(
     modifier: Modifier = Modifier,
     onViewAllClick: () -> Unit
 ) {
+
+    val lazyListState = rememberLazyListState()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -83,6 +87,7 @@ fun TournamentSection(
                             registrationStatus = RegistrationStatus.OPEN,
                             currentPlayers = 670,
                             maxPlayers = 800,
+                            gameName = "PUBG",
                             gameMode = "Solo",
                             entryFee = 10,
                             startTime = "3rd Aug at 10:00 pm",
@@ -96,6 +101,7 @@ fun TournamentSection(
                             registrationStatus = RegistrationStatus.CLOSED,
                             currentPlayers = 500,
                             maxPlayers = 500,
+                            gameName = "COD",
                             gameMode = "Squad",
                             entryFee = 20,
                             startTime = "4th Aug at 8:00 pm",
@@ -109,6 +115,7 @@ fun TournamentSection(
                             registrationStatus = RegistrationStatus.OPENING_SOON,
                             currentPlayers = 0,
                             maxPlayers = 1000,
+                            gameName = "Fortnite",
                             gameMode = "Duo",
                             entryFee = 15,
                             startTime = "5th Aug at 9:00 pm",
@@ -123,8 +130,6 @@ fun TournamentSection(
     }
 }
 
-
-
 data class TournamentInfo(
     val game: String,
     val organizer: String,
@@ -132,6 +137,7 @@ data class TournamentInfo(
     val currentPlayers: Int,
     val maxPlayers: Int,
     val gameMode: String,
+    val gameName: String,
     val entryFee: Int,
     val startTime: String,
     val prizePool: Int,
@@ -255,34 +261,57 @@ fun TournamentCard(
 
                 // Game Mode and Entry Fee
                 Row(
-                    modifier = Modifier
-                        .background(Color(0xFF2A2A2A), RoundedCornerShape(8.dp))
-                        .padding(8.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "BGMI",
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Text(
-                        text = tournamentInfo.gameMode,
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    // BGMI Box
+                    Surface(
+                        color = Color(0xFF2A2A2A),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
                         Text(
-                            text = "Entry-${tournamentInfo.entryFee}",
+                            text = tournamentInfo.gameName,
                             color = Color.White,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                         )
-                        Icon(
-                            painter = painterResource(id = R.drawable.coin),
-                            contentDescription = "coins",
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(16.dp)
+                    }
+
+                    // Game Mode Box
+                    Surface(
+                        color = Color(0xFF2A2A2A),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = tournamentInfo.gameMode,
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                         )
+                    }
+
+                    // Entry Fee Box
+                    Surface(
+                        color = Color(0xFF2A2A2A),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = "Entry-${tournamentInfo.entryFee}",
+                                color = Color.White,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.coin),
+                                contentDescription = "coins",
+                                tint = Color.Unspecified,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
