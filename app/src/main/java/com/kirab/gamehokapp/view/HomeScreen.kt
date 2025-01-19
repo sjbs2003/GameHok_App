@@ -50,6 +50,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 item { PremiumCardsList() }
                 item { GameSection(onViewAllClick = {}) }
                 item { TournamentSection(onViewAllClick = {}) }
+                item { CourseSection(onViewAllClick = {}) }
             }
 
             BottomBar()
