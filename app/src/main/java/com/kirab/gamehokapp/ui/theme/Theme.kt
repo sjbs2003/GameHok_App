@@ -17,8 +17,8 @@ import androidx.core.view.WindowCompat
 // Custom GameHok Colors
 object GamehokTheme {
     val Green = Color(0xFF00B167)
-    val TournamentGreen = Color(0xFF257347)  // Added darker green for tournament backgrounds
-    val DarkerGreen = Color(0xFF072217)  // Added even darker green for tags
+    val TournamentGreen = Color(0xFF257347)
+    val DarkerGreen = Color(0xFF072217)
     val DarkBackground = Color(0xFF1A1A1A)
     val TextWhite = Color(0xFFFFFFFF)
 }
