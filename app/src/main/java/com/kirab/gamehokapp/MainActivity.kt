@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.kirab.gamehokapp.ui.theme.GameHokAppTheme
 import com.kirab.gamehokapp.view.homeScreen.HomeScreen
+import com.kirab.gamehokapp.view.homeScreen.TournamentInfo
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GameHokAppTheme {
-                HomeScreen()
+                GameHokApp()
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.kirab.gamehokapp.view.homeScreen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,11 +64,11 @@ enum class RegistrationStatus {
     OPENING_SOON
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TournamentSection(
     modifier: Modifier = Modifier,
-    onViewAllClick: () -> Unit
+    onViewAllClick: () -> Unit,
+    onTournamentClick: (String) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
     val flingBehavior = rememberSnapperFlingBehavior(lazyListState)
@@ -165,7 +164,8 @@ fun TournamentSection(
             ) { index ->
                 TournamentCard(
                     tournamentInfo = tournaments[index],
-                    modifier = modifier.animateItemPlacement()
+                    onTournamentClick = onTournamentClick,
+                    modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null)
                 )
             }
         }
@@ -175,6 +175,7 @@ fun TournamentSection(
 @Composable
 fun TournamentCard(
     tournamentInfo: TournamentInfo,
+    onTournamentClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cardModifier = remember(modifier) {
@@ -190,7 +191,7 @@ fun TournamentCard(
     }
 
     Card(
-        modifier = cardModifier,
+        modifier = cardModifier.clickable { onTournamentClick(tournamentInfo.id) },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)
@@ -276,7 +277,10 @@ fun TournamentCard(
                 }
             }
             // Tournament Detail
-            TournamentDetails(tournamentInfo)
+            TournamentDetails(
+                tournamentInfo = tournamentInfo,
+                onTournamentClick = onTournamentClick
+            )
         }
     }
 }
@@ -285,6 +289,7 @@ fun TournamentCard(
 @Composable
 private fun TournamentDetails(
     tournamentInfo: TournamentInfo,
+    onTournamentClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -425,7 +430,7 @@ private fun TournamentDetails(
                     tint = GamehokTheme.TextWhite,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { /* Handle click for tournament details */ }
+                        .clickable { onTournamentClick(tournamentInfo.id) }
                 )
             }
         }

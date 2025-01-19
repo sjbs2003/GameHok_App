@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onTournamentClick: (String) -> Unit
+) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -34,7 +37,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             ) {
                 item { PremiumCardsList() }
                 item { GameSection(onViewAllClick = {}) }
-                item { TournamentSection(onViewAllClick = {}) }
+                item { TournamentSection(
+                    onViewAllClick = {},
+                    onTournamentClick = onTournamentClick
+                ) }
                 item { CourseSection(onViewAllClick = {}) }
                 item { PeopleToFollowSection(onViewMoreClick = {}) }
             }
