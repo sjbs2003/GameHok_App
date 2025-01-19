@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -227,15 +228,22 @@ fun TournamentCard(
                 }
 
                 // Organizer Logo
-                Image(
-                    painter = painterResource(id = tournamentInfo.organizerLogo),
-                    contentDescription = tournamentInfo.organizer,
+                Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(56.dp)  // Increased size
                         .align(Alignment.BottomEnd)
                         .padding(8.dp)
                         .background(Color.White, CircleShape)
-                )
+                ) {
+                    Image(
+                        painter = painterResource(id = tournamentInfo.organizerLogo),
+                        contentDescription = tournamentInfo.organizer,
+                        contentScale = ContentScale.Crop,  // Make image fill the space
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(CircleShape)
+                    )
+                }
             }
 
             // Tournament Details Section
