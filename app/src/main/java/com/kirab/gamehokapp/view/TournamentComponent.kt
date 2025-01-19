@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,11 +38,35 @@ import androidx.compose.ui.unit.dp
 import com.kirab.gamehokapp.R
 
 
+data class TournamentInfo(
+    val game: String,
+    val organizer: String,
+    val registrationStatus: RegistrationStatus,
+    val currentPlayers: Int,
+    val maxPlayers: Int,
+    val gameMode: String,
+    val gameName: String,
+    val entryFee: Int,
+    val startTime: String,
+    val prizePool: Int,
+    val backgroundImage: Int,
+    val organizerLogo: Int
+)
+
+enum class RegistrationStatus {
+    OPEN,
+    CLOSED,
+    OPENING_SOON
+}
+
 @Composable
 fun TournamentSection(
     modifier: Modifier = Modifier,
     onViewAllClick: () -> Unit
 ) {
+    val lazyListState = rememberLazyListState()
+    val flingBehavior = rememberSnapperFlingBehavior(lazyListState)
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -72,6 +97,9 @@ fun TournamentSection(
 
         // Tournament Cards
         LazyRow(
+            state = lazyListState,
+            flingBehavior = flingBehavior,
+            modifier = modifier.snapToCenter(lazyListState),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
@@ -125,27 +153,6 @@ fun TournamentSection(
             }
         }
     }
-}
-
-data class TournamentInfo(
-    val game: String,
-    val organizer: String,
-    val registrationStatus: RegistrationStatus,
-    val currentPlayers: Int,
-    val maxPlayers: Int,
-    val gameMode: String,
-    val gameName: String,
-    val entryFee: Int,
-    val startTime: String,
-    val prizePool: Int,
-    val backgroundImage: Int,
-    val organizerLogo: Int
-)
-
-enum class RegistrationStatus {
-    OPEN,
-    CLOSED,
-    OPENING_SOON
 }
 
 @Composable
