@@ -356,6 +356,7 @@ fun TournamentCard(
                         color = Color.White,
                         style = MaterialTheme.typography.bodySmall
                     )
+                    Spacer(modifier = modifier.width(4.dp))
                     Icon(
                         painter = painterResource(id = R.drawable.coin),
                         contentDescription = "coins",
