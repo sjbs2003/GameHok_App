@@ -2,10 +2,10 @@ package com.kirab.gamehokapp.view.detailScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -52,7 +52,15 @@ fun TournamentDetailScreen(
                     modifier = Modifier.background(GamehokTheme.DarkBackground)
                 )
             }
-
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                RoundsAndScheduleSection(
+                    tournamentInfo = tournamentInfo,
+                    modifier = Modifier
+                        .background(GamehokTheme.DarkBackground)
+                        .padding(horizontal = 16.dp)
+                )
+            }
         }
     }
 }
