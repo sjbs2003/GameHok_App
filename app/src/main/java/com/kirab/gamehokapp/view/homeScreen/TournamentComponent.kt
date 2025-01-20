@@ -155,6 +155,7 @@ fun TournamentCard(
                 modifier = modifier
                     .fillMaxWidth()
                     .height(160.dp)
+                    .background(GamehokTheme.primaryGradient)
             ) {
                 GameHokImage(
                     imageRes = tournamentInfo.backgroundImage,

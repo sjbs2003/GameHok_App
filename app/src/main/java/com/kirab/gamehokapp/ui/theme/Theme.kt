@@ -8,6 +8,8 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -21,6 +23,91 @@ object GamehokTheme {
     val TournamentGreen = Color(0xFF233B2A)
     val DarkBackground = Color(0xFF08130E)
     val TextWhite = Color(0xFFFFFFFF)
+
+    // Primary gradient for cards and surfaces
+    val primaryGradient = Brush.linearGradient(
+        colors = listOf(
+            GamehokTheme.DarkBackground,
+            GamehokTheme.DarkBackground.copy(alpha = 0.8f),
+            Color(0xFF1A2C1F)
+        )
+    )
+
+    // Tournament card gradient
+    val tournamentGradient = Brush.linearGradient(
+        colors = listOf(
+            GamehokTheme.TournamentGreen,
+            Color(0xFF2C4A33)
+        )
+    )
+
+    // Premium card gradient
+    val premiumGradient = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFFFFF8DC),
+            Color(0xFFFFE4B5)
+        )
+    )
+
+    // Prize section gradient
+    val prizeGradient = Brush.linearGradient(
+        colors = listOf(
+            GamehokTheme.PrizeGreen,
+            Color(0xFF2C5842)
+        )
+    )
+
+    // Navigation bar gradient
+    val navigationGradient = Brush.verticalGradient(
+        colors = listOf(
+            GamehokTheme.DarkBackground.copy(alpha = 0.9f),
+            GamehokTheme.DarkBackground
+        )
+    )
+
+    // Top bar gradient
+    val topBarGradient = Brush.verticalGradient(
+        colors = listOf(
+            GamehokTheme.DarkBackground,
+            GamehokTheme.DarkBackground.copy(alpha = 0.9f)
+        )
+    )
+
+    // Background gradient for the entire app
+    val backgroundGradient = Brush.verticalGradient(
+        colors = listOf(
+            GamehokTheme.DarkBackground,
+            Color(0xFF0A1710),
+            GamehokTheme.DarkBackground
+        )
+    )
+}
+
+// Extension function to create dynamic gradients based on colors
+fun createGradient(
+    startColor: Color,
+    endColor: Color,
+    direction: GradientDirection = GradientDirection.Horizontal
+): Brush {
+    return when (direction) {
+        GradientDirection.Horizontal -> Brush.horizontalGradient(
+            colors = listOf(startColor, endColor)
+        )
+        GradientDirection.Vertical -> Brush.verticalGradient(
+            colors = listOf(startColor, endColor)
+        )
+        GradientDirection.Diagonal -> Brush.linearGradient(
+            colors = listOf(startColor, endColor),
+            start = Offset(0f, 0f),
+            end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+        )
+    }
+}
+
+enum class GradientDirection {
+    Horizontal,
+    Vertical,
+    Diagonal
 }
 
 private val DarkColorScheme = darkColorScheme(
