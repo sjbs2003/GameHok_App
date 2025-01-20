@@ -66,6 +66,7 @@ enum class RegistrationStatus {
 
 @Composable
 fun TournamentSection(
+    tournaments: List<TournamentInfo>,
     modifier: Modifier = Modifier,
     onViewAllClick: () -> Unit,
     onTournamentClick: (String) -> Unit
@@ -73,60 +74,11 @@ fun TournamentSection(
     val lazyListState = rememberLazyListState()
     val flingBehavior = rememberSnapperFlingBehavior(lazyListState)
 
-    val tournaments = remember {
-        listOf(
-            TournamentInfo(
-                game = "PUBG tournament",
-                organizer = "Red Bull",
-                registrationStatus = RegistrationStatus.OPEN,
-                currentPlayers = 670,
-                maxPlayers = 800,
-                gameName = "PUBG",
-                gameMode = "Solo",
-                entryFee = 10,
-                startTime = "3rd Aug at 10:00 pm",
-                prizePool = 1000,
-                backgroundImage = R.drawable.pubg_tournament,
-                organizerLogo = R.drawable.redbull
-            ),
-            TournamentInfo(
-                game = "COD tournament",
-                organizer = "Monster Energy",
-                registrationStatus = RegistrationStatus.CLOSED,
-                currentPlayers = 500,
-                maxPlayers = 500,
-                gameName = "COD",
-                gameMode = "Squad",
-                entryFee = 20,
-                startTime = "4th Aug at 8:00 pm",
-                prizePool = 2000,
-                backgroundImage = R.drawable.cod_tournament,
-                organizerLogo = R.drawable.monster
-            ),
-            TournamentInfo(
-                game = "Fortnite tournament",
-                organizer = "Asus",
-                registrationStatus = RegistrationStatus.OPENING_SOON,
-                currentPlayers = 0,
-                maxPlayers = 1000,
-                gameName = "Fortnite",
-                gameMode = "Duo",
-                entryFee = 15,
-                startTime = "5th Aug at 9:00 pm",
-                prizePool = 1500,
-                backgroundImage = R.drawable.fortnite_tournament,
-                organizerLogo = R.drawable.asusrog
-            )
-        )
-    }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
-        val headerText = remember { "Compete in Battles" }
-
         // Header
         Row(
             modifier = Modifier
@@ -136,7 +88,7 @@ fun TournamentSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = headerText,
+                text = "Compete in Battles",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -154,7 +106,7 @@ fun TournamentSection(
         LazyRow(
             state = lazyListState,
             flingBehavior = flingBehavior,
-            modifier = modifier.snapToCenter(lazyListState),
+            modifier = Modifier.snapToCenter(lazyListState),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {

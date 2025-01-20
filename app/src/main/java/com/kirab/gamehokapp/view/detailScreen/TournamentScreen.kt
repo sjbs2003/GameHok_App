@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -164,15 +165,17 @@ fun DetailsScreen(
                         // Organizer Logo
                         Box(
                             modifier = Modifier
-                                .size(48.dp)
+                                .size(56.dp)
+                                .padding(8.dp)
                                 .background(Color.White, CircleShape)
-                                .padding(4.dp)
                         ) {
                             GameHokImage(
                                 imageRes = tournamentInfo.organizerLogo,
                                 contentDescription = "Organizer Logo",
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .clip(CircleShape)
                             )
                         }
                     }
