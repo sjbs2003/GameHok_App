@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.kirab.gamehokapp.view.detailScreen.DetailsScreen
+import com.kirab.gamehokapp.view.detailScreen.TournamentDetailScreen
 import com.kirab.gamehokapp.view.homeScreen.HomeScreen
 import com.kirab.gamehokapp.view.homeScreen.RegistrationStatus
 import com.kirab.gamehokapp.view.homeScreen.TournamentInfo
@@ -101,16 +101,14 @@ fun GameHokApp() {
             )
         ) { backStackEntry ->
             val tournamentId = backStackEntry.arguments?.getString("tournamentId")
-            // Find the tournament based on ID
             val tournament = remember(tournamentId) {
                 tournaments.find { it.id == tournamentId }
-                    ?: tournaments[0] // Fallback to first tournament if ID not found
+                    ?: tournaments[0]
             }
-
-            DetailsScreen(
+            TournamentDetailScreen(
                 tournamentInfo = tournament,
                 onBackClick = { navController.popBackStack() },
-                onShareClick = { /* Handle share functionality */ }
+                onShareClick = {}
             )
         }
     }

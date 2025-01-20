@@ -43,7 +43,7 @@ import com.kirab.gamehokapp.view.homeScreen.RegistrationStatus
 import com.kirab.gamehokapp.view.homeScreen.TournamentInfo
 
 @Composable
-fun DetailsScreen(
+fun TournamentImageOverviewScreen(
     tournamentInfo: TournamentInfo,
     onBackClick: () -> Unit,
     onShareClick: () -> Unit,
