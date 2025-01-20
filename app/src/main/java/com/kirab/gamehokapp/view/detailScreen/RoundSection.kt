@@ -46,7 +46,7 @@ fun RoundsAndScheduleSection(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(6.dp)
         ) {
             Text(
                 text = "Rounds and Schedule",
@@ -57,17 +57,14 @@ fun RoundsAndScheduleSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            rounds.forEachIndexed { index, round ->
+            rounds.forEach { round ->
                 RoundItem(round = round)
-
-                if (index < rounds.size - 1) {
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 12.dp),
-                        color = Color.White.copy(alpha = 0.1f)
-                    )
-                }
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                    color = Color.White.copy(alpha = 0.1f)
+                )
             }
         }
     }
@@ -95,7 +92,7 @@ private fun RoundItem(
             )
 
             Surface(
-                color = Color(0xFF2B2B2B),
+                color = Color(0xFF673AB7),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(

@@ -25,11 +25,11 @@ fun TournamentPrizeSection(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = GamehokTheme.DarkBackground
+            containerColor = GamehokTheme.PrizeGreen
         ),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
     ) {
         Column(
             modifier = Modifier
