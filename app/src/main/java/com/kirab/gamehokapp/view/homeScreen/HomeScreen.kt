@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
+    tournaments: List<TournamentInfo>,
     modifier: Modifier = Modifier,
     onTournamentClick: (String) -> Unit
 ) {
@@ -38,6 +39,7 @@ fun HomeScreen(
                 item { PremiumCardsList() }
                 item { GameSection(onViewAllClick = {}) }
                 item { TournamentSection(
+                    tournaments = tournaments,
                     onViewAllClick = {},
                     onTournamentClick = onTournamentClick
                 ) }
