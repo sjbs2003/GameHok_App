@@ -43,6 +43,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kirab.gamehokapp.R
 import com.kirab.gamehokapp.Screens
+import com.kirab.gamehokapp.ui.theme.GamehokTheme
 
 @Composable
 fun GameSection(
@@ -352,8 +354,9 @@ fun TopBar(modifier: Modifier = Modifier) {
                 painter = painterResource(id = R.drawable.profilepic),
                 contentDescription = "Profile Pic",
                 modifier = modifier
-                    .size(40.dp)
+                    .size(50.dp)
                     .padding(4.dp)
+                    .clip(CircleShape)
             )
 
             Row(
@@ -364,7 +367,7 @@ fun TopBar(modifier: Modifier = Modifier) {
                 Row(
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.primary,
+                            color = GamehokTheme.PrizeGreen,
                             shape = MaterialTheme.shapes.extraLarge
                         )
                         .padding(horizontal = 12.dp, vertical = 8.dp),
