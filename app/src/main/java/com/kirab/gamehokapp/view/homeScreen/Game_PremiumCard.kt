@@ -334,7 +334,6 @@ fun TopBar(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .statusBarsPadding()
-
     ) {
         Row(
             modifier = modifier

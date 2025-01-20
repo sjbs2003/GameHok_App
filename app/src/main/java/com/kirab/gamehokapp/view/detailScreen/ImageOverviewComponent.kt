@@ -53,6 +53,7 @@ fun TournamentImageOverviewScreen(
         modifier = modifier
             .fillMaxSize()
             .background(GamehokTheme.DarkBackground)
+            .statusBarsPadding()
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Tournament Banner Image with Overlay

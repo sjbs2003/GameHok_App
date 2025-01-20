@@ -19,7 +19,7 @@ object GamehokTheme {
     val Green = Color(0xFF00B167)
     val PrizeGreen = Color(0xFF1E4434)
     val TournamentGreen = Color(0xFF233B2A)
-    val DarkBackground = Color(0xFF072217)
+    val DarkBackground = Color(0xFF08130E)
     val TextWhite = Color(0xFFFFFFFF)
 }
 
