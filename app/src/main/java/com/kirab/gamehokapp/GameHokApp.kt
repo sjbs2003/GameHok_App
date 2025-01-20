@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.kirab.gamehokapp.view.gameDetailScreen.GameDetailsScreen
 import com.kirab.gamehokapp.view.tournamentDetailScreen.TournamentDetailScreen
 import com.kirab.gamehokapp.view.homeScreen.HomeScreen
 import com.kirab.gamehokapp.view.homeScreen.RegistrationStatus
@@ -15,7 +16,8 @@ import com.kirab.gamehokapp.view.homeScreen.TournamentInfo
 
 enum class Screens(val route: String) {
     Home("home"),
-    TournamentDetail("tournament/{tournamentId}")
+    TournamentDetail("tournament/{tournamentId}"),
+    GameDetail("game/{gameId}")
 }
 
 @Composable
@@ -79,6 +81,7 @@ fun GameHokApp() {
     ) {
         composable(route = Screens.Home.route) {
             HomeScreen(
+                navController = navController,
                 tournaments = tournaments,
                 onTournamentClick = { tournamentId ->
                     navController.navigate(
@@ -109,6 +112,29 @@ fun GameHokApp() {
                 tournamentInfo = tournament,
                 onBackClick = { navController.popBackStack() },
                 onShareClick = {}
+            )
+        }
+
+        composable(
+            route = Screens.GameDetail.route,
+            arguments = listOf(
+                navArgument("gameId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val gameId = backStackEntry.arguments?.getInt("gameId") ?: 1
+            GameDetailsScreen(
+                gameId = gameId,
+                onBackClick = { navController.popBackStack() },
+                onTournamentClick = { tournamentId ->
+                    navController.navigate(
+                        Screens.TournamentDetail.route.replace(
+                            "{tournamentId}",
+                            tournamentId
+                        )
+                    )
+                }
             )
         }
     }

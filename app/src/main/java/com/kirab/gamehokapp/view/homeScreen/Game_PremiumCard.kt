@@ -49,10 +49,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.kirab.gamehokapp.R
+import com.kirab.gamehokapp.Screens
 
 @Composable
 fun GameSection(
+    navController: NavController,
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -95,17 +98,19 @@ fun GameSection(
             GameCard(
                 gameImage = R.drawable.pubg,
                 gameName = "PUBG",
-                onClick = { }
+                onClick = { navController.navigate(Screens.GameDetail.route.replace("{gameId}", "1")) }
             )
+
             GameCard(
                 gameImage = R.drawable.cod,
                 gameName = "Call of Duty",
-                onClick = { }
+                onClick = { navController.navigate(Screens.GameDetail.route.replace("{gameId}", "2")) }
             )
+
             GameCard(
                 gameImage = R.drawable.cs,
                 gameName = "Counter Strike",
-                onClick = { }
+                onClick = { navController.navigate(Screens.GameDetail.route.replace("{gameId}", "3")) }
             )
         }
 

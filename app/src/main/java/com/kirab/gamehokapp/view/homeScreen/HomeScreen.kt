@@ -12,13 +12,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     tournaments: List<TournamentInfo>,
     modifier: Modifier = Modifier,
     onTournamentClick: (String) -> Unit
 ) {
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -37,7 +40,9 @@ fun HomeScreen(
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
                 item { PremiumCardsList() }
-                item { GameSection(onViewAllClick = {}) }
+                item { GameSection(
+                    navController = navController,
+                    onViewAllClick = {}) }
                 item { TournamentSection(
                     tournaments = tournaments,
                     onViewAllClick = {},
