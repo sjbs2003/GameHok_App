@@ -1,4 +1,4 @@
-package com.kirab.gamehokapp.view.detailScreen
+package com.kirab.gamehokapp.view.tournamentDetailScreen
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -254,18 +254,15 @@ fun TournamentImageOverviewScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(1.dp)
+                            .height(2.dp)
                             .background(Color.Gray.copy(alpha = 0.2f))
                     )
 
                     // Green indicator for selected tab
                     Box(
                         modifier = Modifier
-                            .width(with(LocalDensity.current) {
-                                // Calculate width based on total width divided by number of tabs
-                                (LocalConfiguration.current.screenWidthDp.dp - 48.dp) / 3
-                            })
-                            .height(2.dp)
+                            .width(180.dp)
+                            .height(3.dp)
                             .background(Color(0xFF00B167))
                     )
                 }

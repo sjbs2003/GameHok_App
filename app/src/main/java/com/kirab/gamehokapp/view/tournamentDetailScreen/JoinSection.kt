@@ -1,4 +1,4 @@
-package com.kirab.gamehokapp.view.detailScreen
+package com.kirab.gamehokapp.view.tournamentDetailScreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

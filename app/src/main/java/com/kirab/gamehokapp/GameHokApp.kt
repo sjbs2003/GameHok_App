@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.kirab.gamehokapp.view.detailScreen.TournamentDetailScreen
+import com.kirab.gamehokapp.view.tournamentDetailScreen.TournamentDetailScreen
 import com.kirab.gamehokapp.view.homeScreen.HomeScreen
 import com.kirab.gamehokapp.view.homeScreen.RegistrationStatus
 import com.kirab.gamehokapp.view.homeScreen.TournamentInfo
